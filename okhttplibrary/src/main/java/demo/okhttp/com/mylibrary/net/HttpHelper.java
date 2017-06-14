@@ -62,10 +62,10 @@ public class HttpHelper {
 
     public static <T extends BaseResult> void doGetRequest(Context context, final String url, final Map<String,
             Object> map, final Class<T> clazz, final HttpCallBack<T> httpCallBack) {
-        if (!NetUtils.hasNetwork(context)) {
-            ToastUtils.showToast("网络连接不可用");
-            return;
-        }
+//        if (!NetUtils.hasNetwork(context)) {
+//            ToastUtils.showToast("网络连接不可用");
+//            return;
+//        }
         final String json =getJson(map);
         Observable.just(url)
                 .map(new Func1<String, Map>() {
@@ -85,10 +85,10 @@ public class HttpHelper {
 
     public static <T extends BaseResult> void doPostRequest(Context context, final String url, final Map<String,
             Object> map, final Class<T> clazz, final HttpCallBack<T> httpCallBack) {
-        if (!NetUtils.hasNetwork(context)) {
-            ToastUtils.showToast("网络连接不可用");
-            return;
-        }
+//        if (!NetUtils.hasNetwork(context)) {
+//            ToastUtils.showToast("网络连接不可用");
+//            return;
+//        }
         final String json =getJson(map);
         Observable.just(url)
                 .map(new Func1<String, Map>() {
@@ -117,10 +117,10 @@ public class HttpHelper {
      */
     public static <T extends BaseResult> void doBodyPost(Context context, final String url, final Map<String,
             Object> map, final Class<T> clazz, final HttpCallBack<T> httpCallBack) {
-        if (!NetUtils.hasNetwork(context)) {
-            ToastUtils.showToast("网络连接不可用");
-            return;
-        }
+//        if (!NetUtils.hasNetwork(context)) {
+//            ToastUtils.showToast("网络连接不可用");
+//            return;
+//        }
         final String requestjson =getJson(map);
         Observable.just(url)
                 .map(new Func1<String, Map>() {
@@ -142,7 +142,7 @@ public class HttpHelper {
         if (response != null) {
             if (!TextUtils.isEmpty(String.valueOf(response.get("body")))) {
                 String result = response.get("body").toString();
-                systemLog((int)response.get("requestType"),url,result,requestjson);
+                systemLog((int)response.get("requestType"),url,(String)response.get("url"),result,requestjson);
                 T t = mGson.fromJson(result, clazz);
                 if(!TextUtils.isEmpty(t.getCode()) && TextUtils.equals(t.getCode(),"200")){
                     httpCallBack.onSuccess(result, mGson.fromJson(result, clazz));
@@ -150,15 +150,15 @@ public class HttpHelper {
                     httpCallBack.onError(result, mGson.fromJson(result, clazz));
                 }
             } else {
-                httpCallBack.onError("网络异常",null);
-                systemLog((int)response.get("requestType"),url,(TextUtils.isEmpty(response.get("message").toString()) ? response.get("body").toString() : response.get("message").toString()),requestjson);
+                httpCallBack.onError(TextUtils.isEmpty(response.get("message").toString()) ? response.get("body").toString() : response.get("message").toString(),null);
+                systemLog((int)response.get("requestType"),url,(String)response.get("url"),(TextUtils.isEmpty(response.get("message").toString()) ? response.get("body").toString() : response.get("message").toString()),requestjson);
             }
         }
     }
 
     //请求网络
     private static Map getReponse(String url, String json, Map<String,Object> paramsMap,int requestType) {
-        StringBuilder tempParams;
+        StringBuilder tempParams = null;
         RequestBody body;
         Map<String, Object> responsemap = new HashMap<String, Object>();
 
@@ -187,9 +187,16 @@ public class HttpHelper {
             response = getInstance().newCall(request).execute();
             responsemap.put("body", response.body().string());
             responsemap.put("requestType",requestType);//请求的类型
+            if(requestType != 2){
+                responsemap.put("url",String.format("%s?%s",url, tempParams.toString()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             responsemap.put("body", "");
+            responsemap.put("requestType",requestType);//请求的类型
+            if(requestType != 2){
+                responsemap.put("url",String.format("%s?%s",url, tempParams.toString()));
+            }
             if (e instanceof SocketTimeoutException) {
                 responsemap.put("message", "网络连接超时,请检查网络！");
             } else if (e instanceof SocketException) {
@@ -261,18 +268,18 @@ public class HttpHelper {
         return tempParams;
     }
 
-    private static void systemLog(int requestTyep,String url,String result,String json){
+    private static void systemLog(int requestTyep,String host,String url_param,String result,String json){
         switch (requestTyep){
             case 0:
-                LogUtils.logI("GET请求:", url + "\n" + json);
+                LogUtils.logI("GET请求:", url_param + "\n" + json);
                 LogUtils.logI("GET返回: ", result);
                 break;
             case 1:
-                LogUtils.logI("POST请求:", url + "\n" + json);
+                LogUtils.logI("POST请求:", url_param + "\n" + json);
                 LogUtils.logI("POST返回: ", result);
                 break;
             case 2:
-                LogUtils.logI("POST请求:", url + "\n" + json);
+                LogUtils.logI("POST请求:", host + "\n" + json);
                 LogUtils.logI("POST返回: ", result);
                 break;
         }
