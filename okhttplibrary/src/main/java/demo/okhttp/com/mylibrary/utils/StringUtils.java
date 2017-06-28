@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +26,8 @@ import java.util.regex.Pattern;
  * Version: V1.0
  */
 public class StringUtils {
+
+    private static final int CACHE_SIZE = 4096;
 
     private final static Pattern emailer = Pattern
             .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
@@ -584,5 +587,62 @@ public class StringUtils {
     public static String getDataTime(String format) {
         return new SimpleDateFormat(format, Locale.getDefault()).format(new Date());
     }
+
+    /**
+     * 传入的字符串是否相等
+     *
+     * @param a a字符串
+     * @param b b字符串
+     * @return 如果字符串相等（值比较）返回true，否则返回false
+     */
+    public static boolean equal(String a, String b) {
+        return a == b || (a != null && b != null && a.length() == b.length() && a.equals(b));
+    }
+
+    /**
+     * InputSteam 转换到 String，会把输入流关闭
+     *
+     * @param inputStream 输入流
+     * @return String 如果有异常则返回null
+     */
+    public static String stringFromInputStream(InputStream inputStream) {
+        try {
+            byte[] readBuffer = new byte[CACHE_SIZE];
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            while (true) {
+                int readLen = inputStream.read(readBuffer, 0, CACHE_SIZE);
+                if (readLen <= 0) {
+                    break;
+                }
+
+                byteArrayOutputStream.write(readBuffer, 0, readLen);
+            }
+
+            return byteArrayOutputStream.toString("utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * 是否在长度范围之类
+     * @param string 内容
+     * @param begin 最小长度（inclusive）
+     * @param end 最大长度（inclusive）
+     * @return 字符串长度在begin和end之内返回true，否则返回false。<p><b>输入字符串为null时，返回false</b></p>
+     */
+    public static boolean lengthInRange(String string, int begin, int end) {
+        return string != null && string.length() >= begin && string.length() <= end;
+    }
+
+
 
 }

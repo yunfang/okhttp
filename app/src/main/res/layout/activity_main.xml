@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="demo.okhttp.com.myapplication.MainActivity">
 
     <TextView
@@ -22,4 +23,36 @@
         android:layout_height="wrap_content"
         android:text="网络请求"/>
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/id_cache_bu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取缓存对象"/>
+
+
+    <Button
+        android:id="@+id/id_start_bu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="启动qq"/>
+
+
+    <Button
+        android:id="@+id/id_start_cache"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取缓存"/>
+
+
+    <Button
+        android:id="@+id/id_start_cache_clear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清除缓存"/>
+
+    <TextView
+        android:id="@+id/id_cache_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

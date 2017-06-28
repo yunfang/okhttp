@@ -18,6 +18,8 @@ public class LocalApplication extends Application {
         super.onCreate();
         LocalApplication.mContext = getApplicationContext();
 //        initAppCrashHelper();
+
+
         initLogger();
     }
 

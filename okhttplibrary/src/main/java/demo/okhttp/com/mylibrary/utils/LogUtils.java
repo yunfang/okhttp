@@ -13,7 +13,6 @@ import demo.okhttp.com.mylibrary.global.Constants;
 
 
 /**
- * Author: 墨色玄清丶
  * *
  * Date: 2016-06-04 13:03
  * *
