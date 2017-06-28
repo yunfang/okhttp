@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
+import demo.okhttp.com.myapplication.Config;
 import demo.okhttp.com.myapplication.utils.ConstantUtils;
 import demo.okhttp.com.myapplication.utils.FileUtils;
 import demo.okhttp.com.mylibrary.utils.LogUtils;
@@ -319,6 +320,7 @@ public final class ObjectCache {
             file.setLastModified(entity.getInvalidTimeStamp());
         } catch (Exception e) {
             LogUtils.logE(e.getMessage());
+            mDiskCacheDir = FileUtils.createFolder(Config.getObjectCacheFolderPath());
         } finally {
             try {
                 oos.close();
