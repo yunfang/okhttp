@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.id_net_bu:
+
                 HashMap<String, Object> stringObjectHashMap = new HashMap<>();
                 stringObjectHashMap.put("action","categoryList");
                 stringObjectHashMap.put("uuid","38bc1a11c8ff");
