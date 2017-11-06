@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.id_net_bu://http://www.yuexiang365.cn/app/v3.1.2.json?action=categoryList&uuid=38bc1a11c8ff
+            case R.id.id_net_bu:
                 HashMap<String, Object> stringObjectHashMap = new HashMap<>();
                 stringObjectHashMap.put("action","categoryList");
                 stringObjectHashMap.put("uuid","38bc1a11c8ff");
-                HttpHelper.doGetRequest(this, "http://www.yuexiang365.cn/app/v3.1.2.json", stringObjectHashMap, CotegoryBean.class, new HttpCallBack<CotegoryBean>() {
+                HttpHelper.doGetRequest(this, "https://www.yunfangjsj.com/json/v3.1.2.json", stringObjectHashMap, CotegoryBean.class, new HttpCallBack<CotegoryBean>() {
                     @Override
                     public void onSuccess(String json, CotegoryBean baseResult) {
                         ToastUtils.showToast(json);
